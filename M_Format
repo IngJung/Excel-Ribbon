@@ -1,0 +1,129 @@
+Sub NoGrid()
+'
+' Removes gridlines from the workbook
+'
+    Dim WrkBk As Workbook
+    Dim WrkSht, ActWin As Worksheet
+    Dim i As Integer
+    
+    Set WrkBk = ActiveWorkbook
+    Set ActWin = ActiveSheet
+    
+    If ActiveWindow.DisplayGridlines = False Then
+        For Each WrkSht In WrkBk.Worksheets
+            WrkSht.Activate
+            ActiveWindow.DisplayGridlines = True
+        Next WrkSht
+    Else
+        For Each WrkSht In WrkBk.Worksheets
+            WrkSht.Activate
+            ActiveWindow.DisplayGridlines = False
+        Next WrkSht
+    End If
+    
+    ActWin.Activate
+
+End Sub
+
+Sub FormatUnits()
+'
+'Format
+'
+    Selection.Style = "Comma"
+    Selection.NumberFormat = "#,##0;[Red](#,##0);""-"""
+    'Selection.Columns.AutoFit
+    
+End Sub
+
+Sub FormatThousands()
+'
+'Format
+'
+    Selection.Style = "Comma"
+    Selection.NumberFormat = "#,##0,;[Red](#,##0,);""-"""
+    'Selection.Columns.AutoFit
+End Sub
+
+Sub FormatMillions()
+'
+'Format
+'
+    Selection.Style = "Comma"
+    Selection.NumberFormat = "#,##0,,;[Red](#,##0,,);""-"""
+    'Selection.Columns.AutoFit
+End Sub
+
+Sub FormatPercentage()
+'
+'Format
+'
+    'Selection.Style = "Comma"
+    Selection.NumberFormat = "0.00%;0.00%;""-"""
+    'Selection.Columns.AutoFit
+End Sub
+
+
+Sub FormatCheck()
+    
+    Dim rCell As Range
+    
+    For Each rCell In Selection
+        rCell.Select
+            With Selection
+                .FormatConditions.Add Type:=xlExpression, Formula1:= _
+                  "=(" & Selection.Address(False, False) & "=0)"
+                With .FormatConditions(.FormatConditions.Count)
+                    .SetFirstPriority
+                    With .Interior
+                        .Pattern = xlSolid
+                        .PatternColorIndex = xlAutomatic
+                        .ThemeColor = xlThemeColorAccent6
+                        .TintAndShade = 0.399975585192419
+                        .PatternTintAndShade = 0
+                    End With
+                    With .Font
+                        .ColorIndex = xlAutomatic
+                        .TintAndShade = 0
+                        .Bold = False
+                    End With
+                    Selection.Style = "Comma"
+                    Selection.NumberFormat = "#,##0;(#,##0);""-"""
+                End With
+            End With
+            With Selection
+                .FormatConditions.Add Type:=xlExpression, Formula1:= _
+                  "=(" & Selection.Address(False, False) & "<>0)"
+                With .FormatConditions(.FormatConditions.Count)
+                    .SetFirstPriority
+                    With .Interior
+                        .Pattern = xlSolid
+                        .PatternColorIndex = xlAutomatic
+                        .Color = 6118909
+                        .TintAndShade = 0
+                        .PatternTintAndShade = 0
+                    End With
+                    With .Font
+                        .ThemeColor = xlThemeColorDark1
+                        .TintAndShade = 0
+                        .Bold = True
+                    End With
+                    Selection.Style = "Comma"
+                    Selection.NumberFormat = "#,##0;(#,##0);""-"""
+                End With
+            End With
+        Next rCell
+End Sub
+
+Sub CAS()
+    If Selection.HorizontalAlignment = xlCenterAcrossSelection Then
+        Selection.HorizontalAlignment = xlGeneral
+    Else
+        Selection.HorizontalAlignment = xlCenterAcrossSelection
+    End If
+End Sub
+
+Sub TogglePrint()
+    If ActiveSheet.DisplayPageBreaks = True Then
+        ActiveSheet.DisplayPageBreaks = False
+    End If
+End Sub
