@@ -1,37 +1,33 @@
 Sub Delete_Rows_Based_On_Value()
+'
 'Apply a filter to a Range and delete visible rows
-'Source: https://www.excelcampus.com/vba/delete-rows-cell-values/
-'Edited by MPR
+'
 
-    Dim Crit As String
-    Dim Sel As Range
-    Dim ws As Worksheet
+    Dim sCrit, sAddress As String
+    Dim rData, rFilter As Range
+    Dim wsAct As Worksheet
     
     '''Select the criteria you want to be deleted
     ''' If you don't want the criteria deleted, add <> before it - note that there still a slight issue with this formula, will clean it up later
-    Crit = "<>1"
+    sCrit = "<>" & 0
     
-    Set Sel = Selection
-    Set ws = ActiveSheet
+    Set wsAct = ActiveSheet
+    Set rData = Selection
+    Set rFilter = rData.Offset(-1, 0).Resize(rData.Rows.Count + 1, 1)
     
-      'Clear any existing filters
-      On Error Resume Next
-        ws.ShowAllData
-      On Error GoTo 0
+        On Error Resume Next
+            wsAct.ShowAllData
+        On Error GoTo 0
+        
+        wsAct.Range(rFilter.Address).AutoFilter Field:=1, Criteria1:=sCrit
+          
+        Application.DisplayAlerts = False
+          wsAct.Range(rData.Address).SpecialCells(xlCellTypeVisible).Delete
+        Application.DisplayAlerts = True
     
-      '1. Apply Filter
-      ws.Range(Sel.Address).AutoFilter Field:=1, Criteria1:=Crit
-      
-      '2. Delete Rows
-      Application.DisplayAlerts = False
-        ws.Range(Sel.Address).SpecialCells(xlCellTypeVisible).Delete
-      Application.DisplayAlerts = True
-      
-      '3. Clear Filter
-      
-      On Error Resume Next
-        ws.ShowAllData
-      On Error GoTo 0
+        On Error Resume Next
+          wsAct.Range(rFilter.Address).AutoFilter
+        On Error GoTo 0
 
 End Sub
 
