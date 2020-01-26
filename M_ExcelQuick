@@ -1,0 +1,52 @@
+Sub Delete_Rows_Based_On_Value()
+'Apply a filter to a Range and delete visible rows
+'Source: https://www.excelcampus.com/vba/delete-rows-cell-values/
+'Edited by MPR
+
+    Dim Crit As String
+    Dim Sel As Range
+    Dim ws As Worksheet
+    
+    '''Select the criteria you want to be deleted
+    ''' If you don't want the criteria deleted, add <> before it - note that there still a slight issue with this formula, will clean it up later
+    Crit = "<>1"
+    
+    Set Sel = Selection
+    Set ws = ActiveSheet
+    
+      'Clear any existing filters
+      On Error Resume Next
+        ws.ShowAllData
+      On Error GoTo 0
+    
+      '1. Apply Filter
+      ws.Range(Sel.Address).AutoFilter Field:=1, Criteria1:=Crit
+      
+      '2. Delete Rows
+      Application.DisplayAlerts = False
+        ws.Range(Sel.Address).SpecialCells(xlCellTypeVisible).Delete
+      Application.DisplayAlerts = True
+      
+      '3. Clear Filter
+      
+      On Error Resume Next
+        ws.ShowAllData
+      On Error GoTo 0
+
+End Sub
+
+Sub Add_To_Formula()
+
+    Dim rSel, rCell As Range
+    Dim sAdd, sForm As String
+    
+    sAdd = "*1000"
+    
+    Set rSel = Selection
+    
+    For Each rCell In rSel
+        sForm = rCell.Formula
+        rCell.Formula = sForm & sAdd
+    Next rCell
+    
+End Sub
