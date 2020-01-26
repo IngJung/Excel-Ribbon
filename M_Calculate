@@ -1,0 +1,119 @@
+Public nRelativeFormula As Integer
+
+Sub CalcSelection()
+'
+'Format
+'
+    Selection.Calculate
+    
+End Sub
+
+Sub CalcWrkShts()
+'
+'Lists the worksheet names in the workbook
+'
+    Dim Rng As Range
+    Dim WrkSht As Worksheet
+    
+    Set Rng = Selection
+    
+    For Each WrkSht In Worksheets
+        Rng.Value = WrkSht.Name
+        Set Rng = Rng.Offset(1, 0)
+    Next WrkSht
+
+End Sub
+
+Sub CalcFromIndirect()
+'
+'Converts Indirect into Formula
+'Source: https://www.mrexcel.com/board/threads/convert-indirect-function-to-direct-link.966902/
+'
+    Dim posOf, endOf, nestLevel As Integer
+    Dim eval, cformula As String
+    Dim r, c As Range
+    Set r = Selection
+    For Each c In r
+        cformula = c.Formula
+        posOf = InStr(1, cformula, "INDIRECT(", vbTextCompare)
+        If (posOf > 0) Then
+            endOf = 1
+            nestLevel = 1
+            Do While nestLevel > 0
+                Select Case Mid(cformula, posOf + 10 + endOf, 1)
+                Case "("
+                    nestLevel = nestLevel + 1
+                Case ")"
+                    nestLevel = nestLevel - 1
+                End Select
+                endOf = endOf + 1
+            Loop
+            ieval = Evaluate("=" & Mid(c.Formula, posOf + 9, endOf))
+            
+            cformula = Mid(cformula, 1, posOf - 1) & eval & Mid(cformula, posOf + endOf + 9 + 1)
+            c.Formula = cformula
+        End If
+    Next c
+End Sub
+
+Sub CalcFormulaReference()
+'
+'Loops through formula references
+'
+    Dim nRef As Integer
+    Dim rSelection, rCell As Range
+    
+    Select Case nRelativeFormula
+        Case Is = 0
+            nRelativeFormula = 4
+        Case Is = 1
+            nRelativeFormula = 2
+        Case Is = 2
+            nRelativeFormula = 3
+        Case Is = 3
+            nRelativeFormula = 4
+        Case Is = 4
+            nRelativeFormula = 1
+    End Select
+
+    Set rSelection = Selection
+    nRef = nRelativeFormula
+    
+    Debug.Print (nRelativeFormula)
+    
+    For Each rCell In rSelection
+        rCell.Formula = Application.ConvertFormula(rCell.Formula, _
+                                                XlReferenceStyle.xlA1, _
+                                                XlReferenceStyle.xlA1, _
+                                                nRef)
+    Next rCell
+    
+End Sub
+
+
+Sub CalcSumifsToSumProduct():
+'
+'Changes Sumif Formulas to SumProducts
+'
+    Dim sForm As String
+    Dim rSelection, rCell As Range
+    
+    Set rSelection = Selection
+    
+    For Each rCell In rSelection
+    
+        sForm = rCell.Formula
+        
+        If InStr(sForm, "SUMIFS(") Then
+            sForm = Replace(sForm, "SUMIFS(", "SUMPRODUCT((")
+            sForm = ReplaceN(sForm, ",", ")*(", 1)
+            sForm = ReplaceN(sForm, ",", "=", 1)
+            sForm = sForm & ")"
+        End If
+    
+        rCell.Formula = sForm
+    Next rCell
+    
+    rSelection.Select
+    
+End Sub
