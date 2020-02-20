@@ -1,3 +1,5 @@
+Public nBorderType As Integer
+
 Sub NoGrid()
 '
 ' Removes gridlines from the workbook
@@ -58,7 +60,7 @@ Sub FormatPercentage()
 'Format
 '
     'Selection.Style = "Comma"
-    Selection.NumberFormat = "0.00%;0.00%;""-"""
+    Selection.NumberFormat = "0.00%;[Red](0.00%);""-"""
     'Selection.Columns.AutoFit
 End Sub
 
@@ -77,8 +79,8 @@ Sub FormatCheck()
                     With .Interior
                         .Pattern = xlSolid
                         .PatternColorIndex = xlAutomatic
-                        .ThemeColor = xlThemeColorAccent6
-                        .TintAndShade = 0.399975585192419
+                        .Color = RGB(169, 208, 142)
+                        .TintAndShade = 0
                         .PatternTintAndShade = 0
                     End With
                     With .Font
@@ -126,4 +128,111 @@ Sub TogglePrint()
     If ActiveSheet.DisplayPageBreaks = True Then
         ActiveSheet.DisplayPageBreaks = False
     End If
+End Sub
+
+Sub FormatBorders()
+'
+'Formats the borders in a project
+'
+    Dim rSel As Range
+    
+    Select Case nBorderType
+        Case Is = 0
+            nBorderType = 1
+        Case Is = 1
+            nBorderType = 2
+        Case Is = 2
+            nBorderType = 0
+    End Select
+    
+    Set rSel = Selection
+    
+    rSel.Borders(xlDiagonalDown).LineStyle = xlNone
+    rSel.Borders(xlDiagonalUp).LineStyle = xlNone
+    rSel.Borders(xlEdgeLeft).LineStyle = xlNone
+    rSel.Borders(xlEdgeTop).LineStyle = xlNone
+    rSel.Borders(xlEdgeBottom).LineStyle = xlNone
+    rSel.Borders(xlEdgeRight).LineStyle = xlNone
+    rSel.Borders(xlInsideVertical).LineStyle = xlNone
+    rSel.Borders(xlInsideHorizontal).LineStyle = xlNone
+    rSel.Borders(xlDiagonalDown).LineStyle = xlNone
+    rSel.Borders(xlDiagonalUp).LineStyle = xlNone
+    
+    If nBorderType = 0 Then
+        With rSel.Borders(xlEdgeLeft)
+            .LineStyle = xlContinuous
+            .ThemeColor = 1
+            .TintAndShade = -0.499984740745262
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeTop)
+            .LineStyle = xlContinuous
+            .ThemeColor = 1
+            .TintAndShade = -0.499984740745262
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeBottom)
+            .LineStyle = xlContinuous
+            .ThemeColor = 1
+            .TintAndShade = -0.499984740745262
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeRight)
+            .LineStyle = xlContinuous
+            .ThemeColor = 1
+            .TintAndShade = -0.499984740745262
+            .Weight = xlThin
+        End With
+    ElseIf nBorderType = 1 Then
+        With rSel.Borders(xlEdgeLeft)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeTop)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeBottom)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+        With rSel.Borders(xlEdgeRight)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlThin
+        End With
+    ElseIf nBorderType = 2 Then
+        With rSel.Borders(xlEdgeLeft)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlMedium
+        End With
+        With rSel.Borders(xlEdgeTop)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlMedium
+        End With
+        With rSel.Borders(xlEdgeBottom)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlMedium
+        End With
+        With rSel.Borders(xlEdgeRight)
+            .LineStyle = xlContinuous
+            .ColorIndex = 0
+            .TintAndShade = 0
+            .Weight = xlMedium
+        End With
+    End If
+
 End Sub
