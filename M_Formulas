@@ -1,0 +1,61 @@
+Public nRelativeName As Integer
+
+Sub FormulaName():
+'
+' Formula to get the name of the sheet
+'
+    Select Case nRelativeFormula
+        Case Is = 0
+            nRelativeFormula = 1
+        Case Is = 1
+            nRelativeFormula = 0
+    End Select
+    
+    Debug.Print (nRelativeFormula)
+    
+    If nRelativeFormula = 0 Then
+        Call FormulaNameSheet
+    ElseIf nRelativeFormula = 1 Then
+        Call FormulaNameBook
+    End If
+    
+End Sub
+
+Sub FormulaNameSheet():
+'
+' Formula to get the name of the sheet
+'
+    Dim sFilename, sFind, sFormula As String
+    Dim rSel As Range
+    
+    sFilename = "filename"
+    sFind = "]"
+    
+    sFormula = "=MID(CELL(""" & sFilename & """,$A$1),FIND(""" & sFind & """,CELL(""" & sFilename & """,$A$1))+1,999)"
+    
+    Set rSel = Selection
+    
+    rSel.Value = sFormula
+    
+End Sub
+
+Sub FormulaNameBook():
+'
+' Formula to get the name of the workbook
+'
+    Dim sFilename, sFind1, sFind2, sFormula As String
+    Dim rSel As Range
+    
+    sFilename = "filename"
+    sFind1 = "["
+    sFind2 = "]"
+    
+    sFormula = "=MID(CELL(""" & sFilename & """,$A$1)," _
+                     & "FIND(""" & sFind1 & """,CELL(""" & sFilename & """,$A$1))+1," _
+                       & "FIND(""" & sFind2 & """, CELL(""" & sFilename & """,A1))-FIND(""" & sFind1 & """,CELL(""" & sFilename & """,$A$1))-1)"
+    
+    Set rSel = Selection
+    
+    rSel.Value = sFormula
+
+End Sub
