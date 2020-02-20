@@ -17,7 +17,7 @@ Sub MyMenu()
     
     Set FormatUnitsItem = CommandBars("Tools").Controls.Add(Type:=msoControlButton)
     With FormatUnitsItem
-        .BeginGroup = True
+        .BeginGroup = Trune
         .Caption = "Format &Units"
         .FaceId = 100
         .OnAction = "FormatUnits"
@@ -39,6 +39,14 @@ Sub MyMenu()
         .OnAction = "FormatMillions"
     End With
     
+    Set FormatBordersItem = CommandBars("Tools").Controls.Add(Type:=msoControlButton)
+    With FormatBordersItem
+        .BeginGroup = False
+        .Caption = "Format &Borders"
+        .FaceId = 81
+        .OnAction = "FormatBorders"
+    End With
+    
     Set FormatPercentageItem = CommandBars("Tools").Controls.Add(Type:=msoControlButton)
     With FormatPercentageItem
         .BeginGroup = False
@@ -46,8 +54,7 @@ Sub MyMenu()
         .FaceId = 95
         .OnAction = "FormatPercentage"
     End With
-    
-    
+     
     Set CheckItem = CommandBars("Tools").Controls.Add(Type:=msoControlButton)
     With CheckItem
         .BeginGroup = False
@@ -102,6 +109,14 @@ Sub MyMenu()
         .Caption = "SumIfs To SumPr&oduct"
         .FaceId = 1032
         .OnAction = "CalcSumifsToSumProduct"
+    End With
+    
+    Set FormulaNameItem = CommandBars("Tools").Controls.Add(Type:=msoControlButton)
+    With FormulaNameItem
+        .BeginGroup = False
+        .Caption = "&Name"
+        .FaceId = 9677
+        .OnAction = "FormulaName"
     End With
 
 End Sub
